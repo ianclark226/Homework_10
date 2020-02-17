@@ -12,7 +12,7 @@ var connection = mysql.createConnection({
 
   // Your password
   password: "yourRootPassword",
-  database: "ice_creamDB"
+  database: "Employee_db"
 });
 
 connection.connect(function(err) {
