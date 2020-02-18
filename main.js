@@ -76,7 +76,95 @@ function runSearch() {
 function addSearch() {
     inquirer
     .prompt({
-        message: "What is the Employees first name?"
+        message: "What is the Employees first name?",
+    },
+    {
+        message: "What is the Employees last name?",
+    },
+    {
+        message: "What is the Employees role?",
+        choices: [
+            "junior developer",
+            "gamer",
+            "cook",
+            "matinance",
+            "designer",
+        ]
+    },
+    {
+        message: "Who is the Employees manager?",
+        choices: [
+            "Ian",
+            "Jon",
+            "Jen",
+            "Eric",
+            "Alex",
+            "None",
+
+
+        ]
+    }
+    )
+}
+
+function removeSearch() {
+    inquirer
+    .prompt() ({
+        message: "Who would you like to remove?",
+        choices: [
+            "Ian",
+            "Jon",
+            "Jen",
+            "Eric",
+            "Alex",
+        ]
+    })
+}
+
+function updatemanagerSearch(){
+    inquirer
+    .prompt({
+        message: "Who would you like to update?",
+        choices: [
+            "Ian",
+            "Jon",
+            "Jen",
+            "Eric",
+            "Alex",
+        ],
+
+        message: "Who is the manager for this person?",
+        choices: [
+            "Ian",
+            "Jon",
+            "Jen",
+            "Eric",
+            "Alex",
+        ],
+
+    })
+}
+
+function updateroleSearch() {
+    inquirer
+    .prompt({
+        message: "Whos role would you like to update?",
+        choices: [
+            "Ian",
+            "Jon",
+            "Jen",
+            "Eric",
+            "Alex",
+        ],
+        message: "What is the new role for the person?",
+        choices: [
+            "junior developer",
+            "gamer",
+            "cook",
+            "matinance",
+            "designer",
+        ]
+        
     })
 }
 
