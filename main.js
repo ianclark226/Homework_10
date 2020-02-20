@@ -23,6 +23,8 @@ connection.connect(function(err) {
 function runSearch() {
     inquirer
     .prompt({
+        name: "Run search",
+        type: "rawlist",
         message: "What would you like to do?",
         choices: [
             "View all Employees",
@@ -70,18 +72,24 @@ function runSearch() {
 
 
         }
-    })
+    });
 }
 
 function addSearch() {
     inquirer
     .prompt({
+        name: "add search",
+        type: "input",
         message: "What is the Employees first name?",
     },
     {
+        name: "add search",
+        type: "input",
         message: "What is the Employees last name?",
     },
     {
+        name: "add search",
+        type: "rawlist",
         message: "What is the Employees role?",
         choices: [
             "junior developer",
@@ -92,6 +100,8 @@ function addSearch() {
         ]
     },
     {
+        name: "add search",
+        type: "rawlist",
         message: "Who is the Employees manager?",
         choices: [
             "Ian",
@@ -110,6 +120,8 @@ function addSearch() {
 function removeSearch() {
     inquirer
     .prompt() ({
+        name: "add search",
+        type: "rawlist",
         message: "Who would you like to remove?",
         choices: [
             "Ian",
@@ -124,6 +136,8 @@ function removeSearch() {
 function updatemanagerSearch(){
     inquirer
     .prompt({
+        name: "add search",
+        type: "rawlist",
         message: "Who would you like to update?",
         choices: [
             "Ian",
@@ -133,6 +147,8 @@ function updatemanagerSearch(){
             "Alex",
         ],
 
+        name: "add search",
+        type: "rawlist",
         message: "Who is the manager for this person?",
         choices: [
             "Ian",
@@ -148,6 +164,8 @@ function updatemanagerSearch(){
 function updateroleSearch() {
     inquirer
     .prompt({
+        name: "add search",
+        type: "rawlist",
         message: "Whos role would you like to update?",
         choices: [
             "Ian",
@@ -156,6 +174,8 @@ function updateroleSearch() {
             "Eric",
             "Alex",
         ],
+        name: "add search",
+        type: "rawlist",
         message: "What is the new role for the person?",
         choices: [
             "junior developer",
