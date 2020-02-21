@@ -20,10 +20,23 @@ connection.connect(function(err) {
     runSearch();
   });
 
+  let user = {
+      first_name : ['ian', 'jon', 'jen', 'eric','alex',],
+      last_name : ['clark', 'lattin', 'nelson', 'dillion', 'malatesta',],
+      role : ['junior developer', 'gamer', 'cook', 'matinance', 'designer',],
+      location : ['front-end', 'bum', 'cafeteria', 'auto', 'media', ],
+      salary : [ '100,000', '20,000', '30,000', '40,000', '50,000',],
+      manager : ['null', 'ian clark', 'jon lattin', 'charizard', 'null',],
+
+      
+  }
+
+  console.table(user);
+
 function runSearch() {
     inquirer
     .prompt({
-        name: "Run search",
+        name: "options",
         type: "rawlist",
         message: "What would you like to do?",
         choices: [
@@ -38,22 +51,23 @@ function runSearch() {
         ]
     })
     .then(function(answer) {
-        switch (answer.action) {
+        
+        switch (answer.options) {
             case "View all Employees":
                 employeeSearch();
-                break;
+                break
 
                 case  "View all Employees by department":
                     departmentSearch();
-                    break;
+                    break
 
                     case "View all Employees by Manager":
                         managerSearch();
-                        break;
+                        break
 
                         case "Add employee":
-                            addSearch();
-                            break;
+                             addSearch();
+                            break
 
                             case "Remove Employee":
                                 removeSearch();
@@ -61,11 +75,11 @@ function runSearch() {
 
                                 case "Update Employee Role":
                                     updateroleSearch();
-                                    break;
+                                    break
 
                                     case "Update Employee Manager":
                                         updatemanagerSearch();
-                                        break;
+                                        break
 
 
 
@@ -75,11 +89,12 @@ function runSearch() {
     });
 }
 
-function addSearch() {
+ function addSearch() {
     inquirer
-    .prompt({
-        name: "add search",
-        type: "input",
+   .prompt([
+       {
+        type: 'input',
+        name: 'name',
         message: "What is the Employees first name?",
     },
     {
@@ -114,13 +129,22 @@ function addSearch() {
 
         ]
     }
+])
+.then(answer => {
+    connection.query(
+        `INSERT INTO employee (first_name, last_name, role, location, salary, manager) VALUES ("${answer.first_name}", "${answer.last_name}", "${answer.role}", "${answer.manager}")`,
+        function(err, rows) {
+            addSearch();
+        }
     )
+})
 }
 
 function removeSearch() {
     inquirer
-    .prompt() ({
-        name: "add search",
+    .prompt ([
+        {
+        name: "rmvname",
         type: "rawlist",
         message: "Who would you like to remove?",
         choices: [
@@ -130,8 +154,22 @@ function removeSearch() {
             "Eric",
             "Alex",
         ]
-    })
-}
+    }
+])
+.then(function(answer) {
+    connection.query(
+        "DELETE FROM employee WHERE ?",
+        {
+            first_name: answer.rmvname
+        },
+        function(err) {
+            if (err) throw err;
+            removeSearch();
+        }
+    )
+})
+    
+    }
 
 function updatemanagerSearch(){
     inquirer
@@ -159,6 +197,13 @@ function updatemanagerSearch(){
         ],
 
     })
+
+    .then (function(answer) {
+        var query = ("SELECT * FROM manager", function(err, row) {
+            console.table(row);
+            updatemanagerSearch();
+        })
+    })
 }
 
 function updateroleSearch() {
@@ -185,6 +230,12 @@ function updateroleSearch() {
             "designer",
         ]
         
+    })
+    .then(function(answer) {
+        var query = ("SELECT * FROM role", function(err, row) {
+            console.table(row);
+            updateroleSearch();
+        })
     })
 }
 
