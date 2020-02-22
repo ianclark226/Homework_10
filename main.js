@@ -16,235 +16,199 @@ var connection = mysql.createConnection({
 });
 
 connection.connect(function(err) {
-    if (err) throw err;
-    runSearch();
-  });
+  if (err) throw err;
+  runSearch();
+});
 
-  let user = {
-      first_name : ['ian', 'jon', 'jen', 'eric','alex',],
-      last_name : ['clark', 'lattin', 'nelson', 'dillion', 'malatesta',],
-      role : ['junior developer', 'gamer', 'cook', 'matinance', 'designer',],
-      location : ['front-end', 'bum', 'cafeteria', 'auto', 'media', ],
-      salary : [ '100,000', '20,000', '30,000', '40,000', '50,000',],
-      manager : ['null', 'ian clark', 'jon lattin', 'charizard', 'null',],
+let user = {
+  first_name: ["ian", "jon", "jen", "eric", "alex"],
+  last_name: ["clark", "lattin", "nelson", "dillion", "malatesta"],
+  role: ["junior developer", "gamer", "cook", "matinance", "designer"],
+  location: ["front-end", "bum", "cafeteria", "auto", "media"],
+  salary: ["100,000", "20,000", "30,000", "40,000", "50,000"],
+  manager: ["null", "ian clark", "jon lattin", "charizard", "null"]
+};
 
-      
-  }
-
-  console.table(user);
+console.table(user);
 
 function runSearch() {
-    inquirer
+  inquirer
     .prompt({
-        name: "options",
-        type: "rawlist",
-        message: "What would you like to do?",
-        choices: [
-            "View all Employees",
-            "View all Employees by department",
-            "View all Employees by Manager",
-            "Add employee",
-            "Remove Employee",
-            "Update Employee Role",
-            "Update Employee Manager",
-
-        ]
+      name: "options",
+      type: "rawlist",
+      message: "What would you like to do?",
+      choices: [
+        "View all Employees",
+        "View all Employees by department",
+        "View all Employees by Manager",
+        "Add employee",
+        "Remove Employee",
+        "Update Employee Role",
+        "Update Employee Manager"
+      ]
     })
     .then(function(answer) {
-        
-        switch (answer.options) {
-            case "View all Employees":
-                employeeSearch();
-                break
+      switch (answer.options) {
+        case "View all Employees":
+          employeeSearch();
+          break;
 
-                case  "View all Employees by department":
-                    departmentSearch();
-                    break
+        case "View all Employees by department":
+          departmentSearch();
+          break;
 
-                    case "View all Employees by Manager":
-                        managerSearch();
-                        break
+        case "View all Employees by Manager":
+          managerSearch();
+          break;
 
-                        case "Add employee":
-                             addSearch();
-                            break
+        case "Add employee":
+          addSearch();
+          break;
 
-                            case "Remove Employee":
-                                removeSearch();
-                                break;
+        case "Remove Employee":
+          removeSearch();
+          break;
 
-                                case "Update Employee Role":
-                                    updateroleSearch();
-                                    break
+        case "Update Employee Role":
+          updateroleSearch();
+          break;
 
-                                    case "Update Employee Manager":
-                                        updatemanagerSearch();
-                                        break
-
-
-
-
-
-        }
+        case "Update Employee Manager":
+          updatemanagerSearch();
+          break;
+      }
     });
 }
 
- function addSearch() {
-    inquirer
-   .prompt([
-       {
-        type: 'input',
-        name: 'name',
-        message: "What is the Employees first name?",
-    },
-    {
-        name: "add search",
+function addSearch() {
+  inquirer
+    .prompt([
+      {
         type: "input",
-        message: "What is the Employees last name?",
-    },
-    {
-        name: "add search",
-        type: "rawlist",
-        message: "What is the Employees role?",
-        choices: [
-            "junior developer",
-            "gamer",
-            "cook",
-            "matinance",
-            "designer",
-        ]
-    },
-    {
-        name: "add search",
+        name: "first_name",
+        message: "What is the Employees first name?"
+      },
+      {
+        name: "last_name",
+        type: "input",
+        message: "What is the Employees last name?"
+      },
+      {
+        name: "role",
+        type: "input",
+        message: "What is the Employees role?"
+      },
+      {
+        name: "location",
+        type: "input",
+        message: "What is the Employees location?"
+      },
+      {
+        name: "salary",
+        type: "input",
+        message: "What is the Employees salary?"
+      },
+      {
+        name: "manager",
         type: "rawlist",
         message: "Who is the Employees manager?",
-        choices: [
-            "Ian",
-            "Jon",
-            "Jen",
-            "Eric",
-            "Alex",
-            "None",
-
-
-        ]
-    }
-])
-.then(answer => {
-    connection.query(
-        `INSERT INTO employee (first_name, last_name, role, location, salary, manager) VALUES ("${answer.first_name}", "${answer.last_name}", "${answer.role}", "${answer.manager}")`,
+        choices: ["Ian", "Jon", "Jen", "Eric", "Alex", "None"]
+      }
+    ])
+    .then(answer => {
+      const string = `INSERT INTO employee (first_name, last_name, role_id, location, salary, manager) VALUES (?)`;
+      connection.query(
+        string,
+        {
+          first_name: answer.first_name,
+          last_name: answer.last_name,
+          role_id: answer.role,
+          location: answer.location,
+          salary: answer.salary,
+          manager: answer.manager
+        },
         function(err, rows) {
-            addSearch();
+            if (err) throw err;
+            runSearch();
         }
-    )
-})
+      );
+    });
 }
 
 function removeSearch() {
-    inquirer
-    .prompt ([
-        {
+  inquirer
+    .prompt([
+      {
         name: "rmvname",
         type: "rawlist",
         message: "Who would you like to remove?",
-        choices: [
-            "Ian",
-            "Jon",
-            "Jen",
-            "Eric",
-            "Alex",
-        ]
-    }
-])
-.then(function(answer) {
-    connection.query(
+        choices: ["Ian", "Jon", "Jen", "Eric", "Alex"]
+      }
+    ])
+    .then(function(answer) {
+      connection.query(
         "DELETE FROM employee WHERE ?",
         {
-            first_name: answer.rmvname
+          first_name: answer.rmvname
         },
         function(err) {
-            if (err) throw err;
-            removeSearch();
+          if (err) throw err;
+          runSearch();
         }
-    )
-})
-    
-    }
+      );
+    });
+}
 
-function updatemanagerSearch(){
-    inquirer
+function updatemanagerSearch() {
+  inquirer
     .prompt({
-        name: "add search",
-        type: "rawlist",
-        message: "Who would you like to update?",
-        choices: [
-            "Ian",
-            "Jon",
-            "Jen",
-            "Eric",
-            "Alex",
-        ],
+      name: "add search",
+      type: "rawlist",
+      message: "Who would you like to update?",
+      choices: ["Ian", "Jon", "Jen", "Eric", "Alex"],
 
-        name: "add search",
-        type: "rawlist",
-        message: "Who is the manager for this person?",
-        choices: [
-            "Ian",
-            "Jon",
-            "Jen",
-            "Eric",
-            "Alex",
-        ],
-
+      name: "add search",
+      type: "rawlist",
+      message: "Who is the manager for this person?",
+      choices: ["Ian", "Jon", "Jen", "Eric", "Alex"]
     })
 
-    .then (function(answer) {
-        var query = ("SELECT * FROM manager", function(err, row) {
-            console.table(row);
-            updatemanagerSearch();
-        })
-    })
+    .then(function(answer) {
+      var query =
+        ("SELECT * FROM manager",
+        function(err, row) {
+          console.table(row);
+          runSearch();
+        });
+    });
 }
 
 function updateroleSearch() {
-    inquirer
+  inquirer
     .prompt({
-        name: "add search",
-        type: "rawlist",
-        message: "Whos role would you like to update?",
-        choices: [
-            "Ian",
-            "Jon",
-            "Jen",
-            "Eric",
-            "Alex",
-        ],
-        name: "add search",
-        type: "rawlist",
-        message: "What is the new role for the person?",
-        choices: [
-            "junior developer",
-            "gamer",
-            "cook",
-            "matinance",
-            "designer",
-        ]
-        
+      name: "add search",
+      type: "rawlist",
+      message: "Whos role would you like to update?",
+      choices: ["Ian", "Jon", "Jen", "Eric", "Alex"],
+      name: "add search",
+      type: "rawlist",
+      message: "What is the new role for the person?",
+      choices: ["junior developer", "gamer", "cook", "matinance", "designer"]
     })
     .then(function(answer) {
-        var query = ("SELECT * FROM role", function(err, row) {
-            console.table(row);
-            updateroleSearch();
-        })
-    })
+      var query =
+        ("SELECT * FROM role",
+        function(err, row) {
+          console.table(row);
+          runSearch();
+        });
+    });
 }
 
-
-
 function afterConnection() {
-    connection.query("SELECT * FROM people", function(err, res) {
-      if (err) throw err;
-      console.log(res);
-      connection.end();
-    });
-  }
+  connection.query("SELECT * FROM people", function(err, res) {
+    if (err) throw err;
+    console.log(res);
+    connection.end();
+  });
+}
