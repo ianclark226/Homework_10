@@ -1,1 +1,3 @@
 # Homework_10
+
+I really struggled on this homework. I think I got really confused with the node and sql. I need to work on my sql a lot more because linking stuff was a struggle. I couldn't find any additional resources online so I tried to take stuff from past activities. I was able to make a table and make node function well but getting the data was tough and I ran out of time. I'm sumbitting this just to have something and not get a complete 0.
